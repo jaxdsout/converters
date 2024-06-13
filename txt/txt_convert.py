@@ -8,13 +8,16 @@ filepaths = glob.glob("files/*.txt")
 pdf = FPDF(orientation="P", unit="mm", format="A4")
 
 for filepath in filepaths:
-    df = pd.read_csv(filepath)
-
     pdf.add_page()
     filename = Path(filepath).stem.title()
     pdf.set_font(family="Times", size=16, style="B")
-    pdf.set_text_color(100, 100, 100)
-    pdf.cell(w=40, h=12, txt=f"{filename}")
-    pdf.cell(w=200, h=50, txt="")
+    pdf.cell(w=40, h=12, txt=f"{filename}", ln=1)
+
+    with open(filepath, "r") as file:
+        content = file.read()
+
+    pdf.set_font(family="Times", size=12)
+    pdf.multi_cell(w=0, h=6, txt=content)
+
 
 pdf.output("files/output.pdf")
